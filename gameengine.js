@@ -11,9 +11,11 @@ window.requestAnimFrame = (function () {
 
 function GameEngine() {
     this.entities = [];
+    this.simEntities = [];
     this.ctx = null;
     this.surfaceWidth = null;
     this.surfaceHeight = null;
+    this.gameGrid = null;
 }
 
 GameEngine.prototype.init = function (ctx) {
@@ -110,6 +112,12 @@ GameEngine.prototype.addEntity = function (entity) {
     this.entities.push(entity);
 }
 
+GameEngine.prototype.addSimEntity = function (entity) {
+    console.log('added entity');
+    this.simEntities.push(entity);
+    this.gameGrid[entity.x][entity.y] = entity;
+}
+
 GameEngine.prototype.draw = function () {
     this.ctx.clearRect(0, 0, this.surfaceWidth, this.surfaceHeight);
     this.ctx.save();
@@ -135,6 +143,23 @@ GameEngine.prototype.update = function () {
             this.entities.splice(i, 1);
         }
     }
+
+    var simEntitiesCount = this.simEntities.length;
+
+    for (var i = 0; i < simEntitiesCount; i++) {
+        var simEntity = this.simEntities[i];
+
+        if (!simEntity.removeFromWorld) {
+            simEntity.update();
+        }
+    }
+
+    for (var i = this.simEntities.length - 1; i >= 0; --i) {
+        if (this.simEntities[i].removeFromWorld) {
+            this.gameGrid[this.simEntities[i].x][this.simEntities[i].y] = null;
+            this.simEntities.splice(i, 1);
+        }
+    }
 };
 
 GameEngine.prototype.loop = function () {
@@ -144,6 +169,7 @@ GameEngine.prototype.loop = function () {
     this.endTurnPress = null;
 }
 
+// Timer
 function Timer() {
     this.gameTime = 0;
     this.maxStep = 0.05;
@@ -160,6 +186,7 @@ Timer.prototype.tick = function () {
     return gameDelta;
 }
 
+// Entity
 function Entity(game, x, y) {
     this.game = game;
     this.x = x;
@@ -195,4 +222,21 @@ Entity.prototype.rotateAndCache = function (image, angle) {
     //offscreenCtx.strokeStyle = "red";
     //offscreenCtx.strokeRect(0,0,size,size);
     return offscreenCanvas;
+}
+
+// Sim Entity
+function SimEntity(game, x, y) {
+    this.game = game;
+    this.x = x;
+    this.y = y;
+    this.removeFromWorld = false;
+}
+
+SimEntity.prototype.update = function () {
+}
+
+SimEntity.prototype.draw = function (ctx) {
+}
+
+SimEntity.prototype.rotateAndCache = function (image, angle) {
 }
