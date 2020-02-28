@@ -23,6 +23,7 @@ for (i = 0; i < gridWidth; i++) {
 // ===========================================
 
 
+
 // ===========================================
 // ============ Start of Utilities ===========
 // ===========================================
@@ -35,7 +36,6 @@ function checkForOverlap(objName, x, y) {
         && grid[x][y].y === y) {
         console.log("Found " + objName + " " + gameEngine.entities[i].x + ", " + gameEngine.entities[i].y);
         output = true;
-        break;
     }
 
     // for (i = 0; i < gameEngine.entities.length; i++) {
