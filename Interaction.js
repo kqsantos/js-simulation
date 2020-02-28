@@ -19,15 +19,17 @@ console.log("GridHeight");
 console.log(gridHeight);
 
 var grid = [];
+grid = new Array(gridWidth);
 var i;
 var j;
 for (i = 0; i < gridWidth; i++) {
     grid[i] = new Array(gridHeight);
+    for (j = 0; j < gridHeight; j++) {
+        grid[i][j] = null;
+    }
 }
-
 console.log("grid");
 console.log(grid);
-
 // ===========================================
 // ======== End of Initial Variables =========
 // ===========================================
@@ -51,6 +53,7 @@ function checkForOverlap(objName, xCoor, yCoor) {
         output = true;
     }
 
+    // var i;
     // for (i = 0; i < gameEngine.entities.length; i++) {
     //     if (gameEngine.entities[i].name === objName
     //         && x === gameEngine.entities[i].x
@@ -70,7 +73,7 @@ function rngWithTolerance(base) {
     var min = base - bounds;
     var max = base + bounds;
 
-    output = Math.floor(Math.random() * ((max + 1) - min)) + min;
+    output = Math.floor(Math.random() * (max - min)) + min;
 
     return output;
 }
@@ -111,8 +114,10 @@ function Tree(game, x, y) {
     this.name = "Tree";
     this.timeBeforeSaplingDrop = 150;
     this.saplingSurvivalChance = 55; // 1 to 100
-    this.maxAge = 1000;
+    this.maxAge = rngWithTolerance(1000);
     this.currentAge = this.maxAge;
+
+
     Entity.call(this, game, x, y);
     this.dropSaplingTimer = rngWithTolerance(this.timeBeforeSaplingDrop);
 }
@@ -143,7 +148,7 @@ Tree.prototype.update = function () {
     else if (this.currentAge < this.maxAge * 0.95) {
         this.display = this.stage2;
     }
-    else if (this.currentAge < this.maxAge) {   
+    else if (this.currentAge < this.maxAge) {
         this.display = this.stage1;
     }
 
@@ -167,12 +172,10 @@ Tree.prototype.update = function () {
                 if (!isOverlapping) {
                     var tempTree = new Tree(gameEngine, tempX + this.x, tempY + this.y);
                     grid[tempX + this.x][tempY + this.y] = tempTree;
+
                     gameEngine.addEntity(tempTree);
                 }
             }
-
-
-
         }
         this.dropSaplingTimer = rngWithTolerance(this.timeBeforeSaplingDrop);
     }
@@ -198,12 +201,6 @@ Tree.prototype.draw = function (ctx) {
     else if (this.display === this.stage5) {
         ctx.drawImage(this.display, drawX - 6, drawY - 30);
     }
-
-
-
-
-
-    
     // drawMe(ctx, "brown", this.x, this.y);
     Entity.prototype.draw.call(this);
 }
@@ -212,11 +209,11 @@ Tree.prototype.draw = function (ctx) {
 // ===========================================
 
 
+
 // ===========================================
 // ========== Start of Grid Display ==========
 // ===========================================
 function GridDisplay(game) {
-    this.timer = 0;
     Entity.call(this, game, 0, 0);
 }
 
@@ -224,12 +221,9 @@ GridDisplay.prototype = new Entity();
 GridDisplay.prototype.constructor = GridDisplay;
 
 GridDisplay.prototype.update = function () {
-    this.timer++;
-
 }
 
 GridDisplay.prototype.draw = function (ctx) {
-
     // Uncomment me to display grid
     // var i;
     // var j;
@@ -248,16 +242,6 @@ GridDisplay.prototype.draw = function (ctx) {
 // ===========================================
 
 
-
-// gameEngine.addEntity(new Tree(gameEngine, gridWidth / 10 - 1, gridHeight / 10 - 1));
-// gameEngine.addEntity(new Tree(gameEngine, gridWidth / 10 - 1, gridHeight / 10));
-// gameEngine.addEntity(new Tree(gameEngine, gridWidth / 10 - 1, gridHeight / 10 + 1));
-// gameEngine.addEntity(new Tree(gameEngine, gridWidth / 10, gridHeight / 10 - 1));
-// gameEngine.addEntity(new Tree(gameEngine, gridWidth / 10, gridHeight / 10));
-// gameEngine.addEntity(new Tree(gameEngine, gridWidth / 10, gridHeight / 10 + 1));
-// gameEngine.addEntity(new Tree(gameEngine, gridWidth / 10 + 1, gridHeight / 10 - 1));
-// gameEngine.addEntity(new Tree(gameEngine, gridWidth / 10 + 1, gridHeight / 10));
-// gameEngine.addEntity(new Tree(gameEngine, gridWidth / 10 + 1, gridHeight / 10 + 1));
 
 // Starting the humans at the upper-right corner of the map
 // for(i = 0; i < 2; i++) {
@@ -285,11 +269,11 @@ AM.queueDownload("./img/stage5.png");
 AM.downloadAll(function () {
 
     gameEngine.addEntity(new GridDisplay(gameEngine));
-    
+
     // Starting the trees at the upper-left corner of the map
     var countWidth = 1;
     var countHeight = 1
-    for(i = 0; i < countWidth; i++) {
+    for (i = 0; i < countWidth; i++) {
         for (j = 0; j < countHeight; j++) {
             var tempX = gridWidth / 2 + i;
             var tempY = gridHeight / 2 - j;
@@ -298,5 +282,5 @@ AM.downloadAll(function () {
             console.log(tempTree)
             grid[tempX][tempY] = tempTree;
         }
-    }   
+    }
 });
