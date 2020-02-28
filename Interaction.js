@@ -187,19 +187,19 @@ Tree.prototype.draw = function (ctx) {
 
 
     if (this.display === this.stage1) {
-        ctx.drawImage(this.display, drawX, drawY);
+        ctx.drawImage(this.display, drawX + 5, drawY + 5);
     }
     else if (this.display === this.stage2) {
-        ctx.drawImage(this.display, drawX, drawY);
+        ctx.drawImage(this.display, drawX + 5, drawY + 5);
     }
     else if (this.display === this.stage3) {
-        ctx.drawImage(this.display, drawX - 2, drawY - 5);
+        ctx.drawImage(this.display, drawX +3, drawY + 0);
     }
     else if (this.display === this.stage4) {
-        ctx.drawImage(this.display, drawX - 3, drawY - 20);
+        ctx.drawImage(this.display, drawX + 2, drawY - 15);
     }
     else if (this.display === this.stage5) {
-        ctx.drawImage(this.display, drawX - 6, drawY - 30);
+        ctx.drawImage(this.display, drawX - 1, drawY - 25);
     }
     // drawMe(ctx, "brown", this.x, this.y);
     Entity.prototype.draw.call(this);
@@ -214,6 +214,7 @@ Tree.prototype.draw = function (ctx) {
 // ========== Start of Grid Display ==========
 // ===========================================
 function GridDisplay(game) {
+    this.timer = 0;
     Entity.call(this, game, 0, 0);
 }
 
@@ -221,17 +222,18 @@ GridDisplay.prototype = new Entity();
 GridDisplay.prototype.constructor = GridDisplay;
 
 GridDisplay.prototype.update = function () {
+    this.timer++;
 }
 
 GridDisplay.prototype.draw = function (ctx) {
     // Uncomment me to display grid
-    // var i;
-    // var j;
-    // for (i = 0; i < gridWidth; i++) {
-    //     for (j = 0; j < gridHeight; j++) {
-    //         strokeMe(ctx, "grey", i, j);
-    //     }
-    // }
+    var i;
+    var j;
+    for (i = 0; i < gridWidth; i++) {
+        for (j = 0; j < gridHeight; j++) {
+            strokeMe(ctx, "grey", i, j);
+        }
+    }
 
     ctx.font = "12px Arial";
     ctx.fillText("Timer: " + this.timer, gameEngine.surfaceWidth - 100, 12);
@@ -242,22 +244,6 @@ GridDisplay.prototype.draw = function (ctx) {
 // ===========================================
 
 
-
-// Starting the humans at the upper-right corner of the map
-// for(i = 0; i < 2; i++) {
-//     for (j = 0; j < 2; j++) {
-//         var tempX = gridWidth - (gridWidth / 10);
-//         var tempY = gridHeight / 10;
-//         var tempHuman = new Human(gameEngine, tempX, tempY)
-//         gameEngine.addEntity(tempHuman);
-//         grid[i][j] = tempTree;
-//     }
-// }
-
-// gameEngine.addEntity(new Human(gameEngine, gridWidth - (gridWidth / 10), gridHeight / 10));
-// gameEngine.addEntity(new Human(gameEngine, gridWidth - (gridWidth / 10) + 1, gridHeight / 10));
-// gameEngine.addEntity(new Human(gameEngine, gridWidth - (gridWidth / 10) + 1, gridHeight / 10 + 1));
-// gameEngine.addEntity(new Human(gameEngine, gridWidth - (gridWidth / 10), gridHeight / 10 + 1));
 
 
 AM.queueDownload("./img/stage1.png");
