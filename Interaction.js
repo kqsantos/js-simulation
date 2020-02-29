@@ -28,6 +28,10 @@ for (i = 0; i < gridWidth; i++) {
         grid[i][j] = null;
     }
 }
+
+gameEngine.gameGrid = grid;
+
+console.log(gameEngine.gameGrid)
 console.log("grid");
 console.log(grid);
 // ===========================================
@@ -112,7 +116,7 @@ function Tree(game, x, y) {
 
 
     this.name = "Tree";
-    this.timeBeforeSaplingDrop = 150;
+    this.timeBeforeSaplingDrop = rngWithTolerance(150);
     this.saplingSurvivalChance = 55; // 1 to 100
     this.maxAge = rngWithTolerance(1000);
     this.currentAge = this.maxAge;
@@ -130,22 +134,22 @@ Tree.prototype.update = function () {
     this.currentAge--;
 
     // If age is 0 then tree is petrified
-    if (this.currentAge === 0) {
+    if (this.currentAge <= 0) {
         this.removeFromWorld = true;
         grid[this.x][this.y] = null;
     }
 
-    if (this.currentAge < this.maxAge * 0.8) {
+    if (this.currentAge < this.maxAge * 0.85) {
         this.display = this.stage5;
         this.dropSaplingTimer--;
     }
-    else if (this.currentAge < this.maxAge * 0.85) {
+    else if (this.currentAge < this.maxAge * 0.88) {
         this.display = this.stage4;
     }
-    else if (this.currentAge < this.maxAge * 0.90) {
+    else if (this.currentAge < this.maxAge * 0.92) {
         this.display = this.stage3;
     }
-    else if (this.currentAge < this.maxAge * 0.95) {
+    else if (this.currentAge < this.maxAge * 0.96) {
         this.display = this.stage2;
     }
     else if (this.currentAge < this.maxAge) {
@@ -153,8 +157,8 @@ Tree.prototype.update = function () {
     }
 
     // 
-    if (this.currentAge > 0 && this.dropSaplingTimer === 0
-        && this.currentAge < this.maxAge * 0.8) {
+    if (this.currentAge > 0 && this.dropSaplingTimer <= 0
+        && this.currentAge < this.maxAge * 0.85) {
         var saplingChance = getRandomInt(1, 100);
         // console.log(saplingChance);
         if (saplingChance >= this.saplingSurvivalChance) {
@@ -173,7 +177,7 @@ Tree.prototype.update = function () {
                     var tempTree = new Tree(gameEngine, tempX + this.x, tempY + this.y);
                     grid[tempX + this.x][tempY + this.y] = tempTree;
 
-                    gameEngine.addEntity(tempTree);
+                    gameEngine.addSimEntity(tempTree);
                 }
             }
         }
@@ -264,7 +268,7 @@ AM.downloadAll(function () {
             var tempX = gridWidth / 2 + i;
             var tempY = gridHeight / 2 - j;
             var tempTree = new Tree(gameEngine, tempX, tempY)
-            gameEngine.addEntity(tempTree);
+            gameEngine.addSimEntity(tempTree);
             console.log(tempTree)
             grid[tempX][tempY] = tempTree;
         }
