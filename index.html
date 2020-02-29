@@ -10,7 +10,14 @@
 
     <div class="title"><img src="./img/title_banner.png" alt="Tree of Life"></div>
     <div class="title">Watch a forest grow from a single seed.</div>
-    <canvas id="gameWorld" tabindex="1" width="1200" height="800"></canvas>
+    <canvas id="gameWorld" tabindex="1" width="1200" height="600"></canvas>
+    <div class="title"> 
+        <br>
+        <div id="text"></div>
+        <button id="save" type="button">Save</button>
+        <button id="load" type="button">Load</button>
+    </div>
+
 </body>
 
 <style>
@@ -31,7 +38,7 @@
     }
 </style>
 
-
+<script type="text/javascript" src="http://24.16.255.56:8888/socket.io/socket.io.js"></script>
 <script type="text/javascript" src="./gameengine.js"></script>
 <script type="text/javascript" src="./assetmanager.js"></script>
 <script type="text/javascript" src="./Interaction.js"></script>

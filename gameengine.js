@@ -90,8 +90,10 @@ GameEngine.prototype.update = function () {
     }
 
     for (var i = this.simEntities.length - 1; i >= 0; --i) {
-        if (this.simEntities[i].removeFromWorld) {
-            this.gameGrid[this.simEntities[i].x][this.simEntities[i].y] = null;
+        if (this.simEntities[i] != null && this.simEntities[i].removeFromWorld) {
+            // console.log(this.simEntities[i])
+            // console.log(this.gameGrid)
+            // this.gameGrid[this.simEntities[i].x][this.simEntities[i].y] = null;
             this.simEntities.splice(i, 1);
         }
     }
