@@ -31,9 +31,9 @@ for (i = 0; i < gridWidth; i++) {
 
 gameEngine.gameGrid = grid;
 
-console.log(gameEngine.gameGrid)
-console.log("grid");
-console.log(grid);
+// console.log(gameEngine.gameGrid)
+// console.log("grid");
+// console.log(grid);
 // ===========================================
 // ======== End of Initial Variables =========
 // ===========================================
@@ -135,8 +135,10 @@ Tree.prototype.update = function () {
 
     // If age is 0 then tree is petrified
     if (this.currentAge <= 0) {
+        gameEngine.gameGrid[this.x][this.y] = null;
         this.removeFromWorld = true;
         grid[this.x][this.y] = null;
+        
     }
 
     if (this.currentAge < this.maxAge * 0.85) {
@@ -197,7 +199,7 @@ Tree.prototype.draw = function (ctx) {
         ctx.drawImage(this.display, drawX + 5, drawY + 5);
     }
     else if (this.display === this.stage3) {
-        ctx.drawImage(this.display, drawX +3, drawY + 0);
+        ctx.drawImage(this.display, drawX + 3, drawY + 0);
     }
     else if (this.display === this.stage4) {
         ctx.drawImage(this.display, drawX + 2, drawY - 15);
@@ -240,7 +242,7 @@ GridDisplay.prototype.draw = function (ctx) {
     }
 
     ctx.font = "12px Arial";
-    ctx.fillText("Timer: " + this.timer, gameEngine.surfaceWidth - 100, 12);
+    // ctx.fillText("Timer: " + this.timer, gameEngine.surfaceWidth - 100, 12);
     Entity.prototype.draw.call(this);
 }
 // ===========================================
@@ -269,8 +271,137 @@ AM.downloadAll(function () {
             var tempY = gridHeight / 2 - j;
             var tempTree = new Tree(gameEngine, tempX, tempY)
             gameEngine.addSimEntity(tempTree);
-            console.log(tempTree)
+            // console.log(tempTree)
             grid[tempX][tempY] = tempTree;
         }
     }
+
+
+    var socket = io.connect("http://24.16.255.56:8888");
+
+    socket.on("load", function (data) {
+        loadState(data);
+        // console.log(data);
+    });
+
+    var text = document.getElementById("text");
+    var saveButton = document.getElementById("save");
+    var loadButton = document.getElementById("load");
+
+    saveButton.onclick = function () {
+        var state = saveMyState();
+        console.log("save");
+        var stateJSON = JSON.stringify(state)
+        // console.log(stateJSON);
+        text.innerHTML = "Saved."
+        socket.emit("save", { studentname: "Kevin Santos", statename: "onlyState", data: stateJSON });
+    };
+
+    loadButton.onclick = function () {
+        console.log("load");
+        text.innerHTML = "Loaded."
+        socket.emit("load", { studentname: "Kevin Santos", statename: "onlyState" });
+    };
+
 });
+
+function saveMyState() {
+    var save = [];
+    for (i = 0; i < gridWidth; i++) {
+        save[i] = new Array(gridHeight);
+        for (j = 0; j < gridHeight; j++) {
+            save[i][j] = null;
+        }
+    }
+
+    for (i = 0; i < gridWidth; i++) {
+        save[i] = new Array(gridHeight);
+        for (j = 0; j < gridHeight; j++) {
+            if (grid[i][j] != null) {
+                save[i][j] = {
+                    timeBeforeSaplingDrop: grid[i][j].timeBeforeSaplingDrop,
+                    dropSaplingTimer: grid[i][j].dropSaplingTimer,
+                    maxAge: grid[i][j].maxAge,
+                    currentAge: grid[i][j].currentAge
+                }
+            }
+
+        }
+    }
+
+    return save;
+}
+
+function loadState(data) {
+    // console.log("pre grid");
+    // console.log(grid);
+
+    // console.log(data.data);
+    var tempGrid = JSON.parse(data.data);
+    // console.log(data.data);
+
+
+    
+    // grid = null;
+    
+    // console.log("gameEngine.simEntities")
+    // console.log(gameEngine.simEntities)
+
+    // Wipe everything
+    for (i = 0; i < gridWidth; i++) {
+        for (j = 0; j < gridHeight; j++) {
+            if(grid[i][j] != null) {
+                // console.log("removing")
+                grid[i][j].removeFromWorld = true;
+                gameEngine.gameGrid[i][j] = null;
+                grid[i][j] = null;
+            }
+        }
+    }
+
+    for (i = 0; i < gridWidth; i++) {
+        grid[i] = new Array(gridHeight);
+        for (j = 0; j < gridHeight; j++) {
+            grid[i][j] = null;
+        }
+    }
+    // gameEngine.gameGrid = [];
+    
+    // console.log("cur grid");
+    // console.log(grid);
+
+
+
+    gameEngine = new GameEngine();
+    
+    gameEngine.init(ctx);    
+    gameEngine.gameGrid = grid;
+
+    
+    
+    gameEngine.addEntity(new GridDisplay(gameEngine));
+    for (i = 0; i < gridWidth; i++) {
+        grid[i] = new Array(gridHeight);
+        for (j = 0; j < gridHeight; j++) {
+            if (tempGrid[i][j] != null) {
+                var tempTree = new Tree(gameEngine, i, j);
+                tempTree.timeBeforeSaplingDrop = tempGrid[i][j].timeBeforeSaplingDrop;
+                tempTree.dropSaplingTimer = tempGrid[i][j].dropSaplingTimer;
+                tempTree.maxAge = tempGrid[i][j].maxAge;
+                tempTree.currentAge = tempGrid[i][j].currentAge;
+
+                grid[i][j] = tempTree;
+                // console.log(tempTree)
+                gameEngine.addSimEntity(tempTree);
+                
+            } else {
+                grid[i][j] = null;
+            }
+        }
+    }
+
+    // console.log("post grid");
+    // console.log(grid);
+    
+    gameEngine.start();
+}
