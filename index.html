@@ -2,40 +2,111 @@
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <title>Kevin's World</title>
+  <meta charset="utf-8">
+  <title>Kevin's World</title>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+  <!-- Latest compiled JavaScript -->
+  <script src="bootstrap/js/bootstrap.min.js"></script>
 </head>
 
 <body>
 
-    <div class="title"><img src="./img/title_banner.png" alt="Tree of Life"></div>
-    <div class="title">Watch a forest grow from a single seed.</div>
-    <canvas id="gameWorld" tabindex="1" width="1200" height="600"></canvas>
-    <div class="title"> 
-        <br>
-        <div id="text"></div>
-        <button id="save" type="button">Save</button>
-        <button id="load" type="button">Load</button>
+
+
+  <div class="container">
+
+    <!-- Row for Title -->
+    <div class="row">
+      <div class="col-9" style="padding: 0%;">
+        <div class="title"><img src="./img/title_banner.png" alt="Tree of Life"></div>
+      </div>
     </div>
+
+    <!-- Row for Subtitle -->
+    <div class="row">
+      <div class="col-9" style="padding: 0%;">
+        <div class="title">Watch a forest grow from a single seed.</div>
+      </div>
+    </div>
+
+    <!-- Row for Canvas and Description -->
+    <div class="row">
+      <div class="col-9" style="padding: 0%;">
+        <canvas id="gameWorld" tabindex="1" width="1000" height="600"></canvas>
+      </div>
+      <div class="col-3">
+        <h5 style="text-align: center;">Welcome to Tree of Life</h5>
+        <p>This is a simulation about tree growth and seed distribution.</p>
+        <p>The tree growth goes through 5 stages before dying:
+          <ul>
+            <li>Seedling stage</li>
+            <li>Sprout stage</li>
+            <li>Sapling stage</li>
+            <li>Small tree stage</li>
+            <li>Mature tree stage</li>
+          </ul>
+        </p>
+        <p>
+          Once the tree has reached the Mature tree stage, it has a 45% chance of dropping a seed within 3 cells of it.
+        </p>
+        <p>
+          The seed drop occurs on a randomized interval (150 ticks +- 10%) before the tree dies.
+        </p>
+        <p>
+          The age of the tree is also randomized (1000 ticks +- 10%)
+        </p>
+        <p>
+          1 second = 60 ticks
+        </p>
+
+      </div>
+    </div>
+
+    <!-- Row for Button -->
+    <div class="row">
+      <div class="col-10" style="padding: 0%;">
+        <div class="title">
+          <button id="save" type="button">Save</button>
+          <button id="load" type="button">Load</button>
+          <div id="text"></div>
+        </div>
+      </div>
+    </div>
+
+  </div> <!-- End of Container -->
+
+
 
 </body>
 
 <style>
-    canvas {
-        padding-left: 0;
-        padding-right: 0;
-        margin-left: auto;
-        margin-right: auto;
-        display: block;
-        border: 1px solid grey;
-        background: #b6e3b6;
-    }
+  .container {
+    margin-right: auto;
+    margin-left: auto;
+    max-width: 1350px;
+    /* or 950px */
+  }
 
-    .title {
-        text-align: center;
-        margin: auto;
-        width: 50%;
-    }
+  canvas {
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    border: 1px solid grey;
+    background: #b6e3b6;
+  }
+
+  .title {
+    text-align: center;
+    margin: auto;
+    width: 50%;
+  }
 </style>
 
 <script type="text/javascript" src="http://24.16.255.56:8888/socket.io/socket.io.js"></script>
