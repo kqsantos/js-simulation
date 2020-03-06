@@ -13,10 +13,10 @@ var gridCellDim = 20; // Width and Height of a grid cell
 var gridWidth = Math.floor(gameEngine.surfaceWidth / gridCellDim);
 var gridHeight = Math.floor(gameEngine.surfaceHeight / gridCellDim);
 
-console.log("GridWidth");
-console.log(gridWidth);
-console.log("GridHeight");
-console.log(gridHeight);
+// console.log("GridWidth");
+// console.log(gridWidth);
+// console.log("GridHeight");
+// console.log(gridHeight);
 
 var grid = [];
 grid = new Array(gridWidth);
@@ -290,7 +290,7 @@ AM.downloadAll(function () {
 
     saveButton.onclick = function () {
         var state = saveMyState();
-        console.log("save");
+        // console.log("save");
         var stateJSON = JSON.stringify(state)
         // console.log(stateJSON);
         text.innerHTML = "Saved."
@@ -298,7 +298,7 @@ AM.downloadAll(function () {
     };
 
     loadButton.onclick = function () {
-        console.log("load");
+        // console.log("load");
         text.innerHTML = "Loaded."
         socket.emit("load", { studentname: "Kevin Santos", statename: "onlyState" });
     };

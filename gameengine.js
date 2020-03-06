@@ -23,11 +23,11 @@ GameEngine.prototype.init = function (ctx) {
     this.surfaceWidth = this.ctx.canvas.width;
     this.surfaceHeight = this.ctx.canvas.height;
     this.timer = new Timer();
-    console.log('game initialized');
+    // console.log('game initialized');
 }
 
 GameEngine.prototype.start = function () {
-    console.log("starting game");
+    // console.log("starting game");
     var that = this;
     (function gameLoop() {
         that.loop();
@@ -36,12 +36,12 @@ GameEngine.prototype.start = function () {
 }
 
 GameEngine.prototype.addEntity = function (entity) {
-    console.log('added entity');
+    // console.log('added entity');
     this.entities.push(entity);
 }
 
 GameEngine.prototype.addSimEntity = function (entity) {
-    console.log('added entity');
+    // console.log('added entity');
     this.simEntities.push(entity);
     this.gameGrid[entity.x][entity.y] = entity;
 }
